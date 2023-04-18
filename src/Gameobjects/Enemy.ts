@@ -1,6 +1,7 @@
-import { gameobjects } from "../index";
+import { gameobjects, rounds } from "../index";
 import { Gameobject } from "../Gameobject";
 import { Map } from "./Map";
+import { Rounds } from "./Rounds";
 
 export class Enemy extends Gameobject {
   //Eigenschaften
@@ -15,6 +16,14 @@ export class Enemy extends Gameobject {
   constructor(map: Map) {
     super();
     this.map = map;
+    this.life = this.getDifficulty()
+    
+    
+    
+  }
+  
+  getDifficulty(){
+    return rounds.rounds * 20;
   }
 
   getCurrentCheckpoint() {
@@ -22,7 +31,7 @@ export class Enemy extends Gameobject {
   }
   //D: Direction, N:Normalenvektor, B: Einheitsvektor
   tick(time: number, dt: number) {
-    //ToDo: Deltazeit in Index.ts noch machen
+  
 
     if (this.cpNumber < this.map.checkpoints.length) {
       let xD = this.getCurrentCheckpoint().xPosCp - this.xPos;
@@ -46,7 +55,8 @@ export class Enemy extends Gameobject {
   render(time: number, ctx: CanvasRenderingContext2D) {
     let red = (255 * (100 - this.life)) / 100;
     let green = (255 * this.life) / 100;
-    ctx.fillStyle = "rgb(" + red + "," + green + ",0)";
+    let blue = (255 * this.getDifficulty()) / 100;
+    ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")" ;
     ctx.fillRect(this.xPos, this.yPos, 10, 10);
   }
   private hasFoundCheckpoint(): boolean {

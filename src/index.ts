@@ -19,7 +19,8 @@ gameobjects.push(new Tavern());
 gameobjects.push(new Turret());
 gameobjects.push(new Enemy(map));
 gameobjects.push(new NewEnemyButton());
-gameobjects.push(new Rounds());
+export let rounds = new Rounds();
+gameobjects.push(rounds);
 gameobjects.push(map);
 
 document.onclick = handleMouseClick;
