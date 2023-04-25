@@ -9,7 +9,7 @@ export class Rounds extends Gameobject {
   yPosRect: number = 100;
   widthRect: number = 20;
   heightRect: number = 20;
-  rounds: number = 1;
+  rounds: number = 0;
 
   render(time: number, ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = "violet";
@@ -21,7 +21,7 @@ export class Rounds extends Gameobject {
     gameobjects.push(new Enemy(map));
     setTimeout(() => {
       this.enemySpawner(count - 1);
-    }, 1000);
+    },1000/this.rounds+ 250);
   }
   onClick(event: MouseEvent) {
     let xPosInField: boolean =
