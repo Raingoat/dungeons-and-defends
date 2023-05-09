@@ -1,10 +1,12 @@
-import { gameobjects } from "../index";
+import { gameobjects, rounds } from "../index";
 import { Gameobject } from "../Gameobject";
 import { Map } from "./Map";
+import { Rounds } from "./Rounds";
 
 export class Enemy extends Gameobject {
   //Eigenschaften
   life: number = 100;
+  maxlife: number = 100;
   speed: number = 75;
   xPos: number = 400;
   yPos: number = 20;
@@ -15,6 +17,14 @@ export class Enemy extends Gameobject {
   constructor(map: Map) {
     super();
     this.map = map;
+    this.life = this.maxlife = this.getDifficulty();
+  }
+
+  getDifficulty() {
+    if (!rounds) {
+      return 0;
+    }
+    return rounds.rounds * 10;
   }
 
   getCurrentCheckpoint() {
@@ -22,8 +32,6 @@ export class Enemy extends Gameobject {
   }
   //D: Direction, N:Normalenvektor, B: Einheitsvektor
   tick(time: number, dt: number) {
-    //ToDo: Deltazeit in Index.ts noch machen
-
     if (this.cpNumber < this.map.checkpoints.length) {
       let xD = this.getCurrentCheckpoint().xPosCp - this.xPos;
       let yD = this.getCurrentCheckpoint().yPosCp - this.yPos;
@@ -38,17 +46,16 @@ export class Enemy extends Gameobject {
         this.cpNumber++;
       }
     }
-    console.log(this.life);
     if (this.life <= 0) {
-      console.log(gameobjects.indexOf(this));
       gameobjects.splice(gameobjects.indexOf(this), 1);
     }
   }
 
   render(time: number, ctx: CanvasRenderingContext2D) {
-    let red = (255 * (100 - this.life)) / 100;
-    let green = (255 * this.life) / 100;
-    ctx.fillStyle = "rgb(" + red + "," + green + ",0)";
+    let red = (255 * (this.maxlife - this.life)) / this.maxlife;
+    let green = (255 * this.life) / this.maxlife;
+    let blue =0*(255 * this.getDifficulty() * (this.maxlife - this.life)) / this.maxlife;
+    ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
     ctx.fillRect(this.xPos, this.yPos, 10, 10);
   }
   private hasFoundCheckpoint(): boolean {

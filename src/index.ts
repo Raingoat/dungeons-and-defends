@@ -6,6 +6,7 @@ import { Turret } from "./Gameobjects/Turret";
 import { Enemy } from "./Gameobjects/Enemy";
 import { Checkpoint } from "./Gameobjects/Checkpoint";
 import { NewEnemyButton } from "./Gameobjects/NewEnemyButton";
+import { Rounds } from "./Gameobjects/Rounds";
 
 //Array mit allen Gameobjects:
 export let gameobjects = [] as Array<Gameobject>;
@@ -18,6 +19,8 @@ gameobjects.push(new Tavern());
 gameobjects.push(new Turret());
 gameobjects.push(new Enemy(map));
 gameobjects.push(new NewEnemyButton());
+export let rounds = new Rounds();
+gameobjects.push(rounds);
 gameobjects.push(map);
 
 document.onclick = handleMouseClick;
@@ -30,6 +33,9 @@ function handleMouseClick(event: MouseEvent) {
 //render loop:
 function loop(time: number) {
   let dt = time - lasttime;
+  gameobjects.sort(function (a, b) {
+    return b.zindex - a.zindex;
+  });
   for (let x = gameobjects.length - 1; x >= 0; x--) {
     let gameobject = gameobjects[x];
     gameobject.tick(time, dt);
