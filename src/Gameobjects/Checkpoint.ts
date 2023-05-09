@@ -1,4 +1,4 @@
-//penis
+
 import { Gameobject } from "../Gameobject";
 
 export class Checkpoint extends Gameobject {
